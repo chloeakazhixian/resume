@@ -9,7 +9,8 @@ on:
     branches:
       - main
       - dev
-
+      -
+jobs:
   login-and-build-push:
     runs-on: ubuntu-latest
 
