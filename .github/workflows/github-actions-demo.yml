@@ -1,0 +1,107 @@
+
+
+
+
+name: 이력서 배포
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+  login-and-build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/resume:latest
+
+##################
+
+  access-and-run:
+    needs: login-and-build-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Access to target server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 49.142.48.252
+          username: jh
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+#          port: ${{ secrets.REMOTE_SSH_PORT }}
+#          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            whoami
+  
+            docker ps
+            
+            docker stop pr
+
+            docker pull akachloe97/resume
+            
+            docker run --rm --name pr -d -p 97:8080 akachloe97/resume
+
+            docker ps
+
+#      - name: Pull from docker hub
+#      - name: run the latest builded image
+
+
+
+
+#      - name: Build Docker Image
+#        run: |
+#          docker build
+#          --platform linux/amd64
+#          -t akachloe97/wedding_front .
+#
+#
+#      - name: Push Docker Image to Registry
+#        run: |
+#          docker push "${{ secrets.DOCKER_USERNAME }}"/wedding_front
+#
+#
+#      - name: SSH into Server and Deploy
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.SERVER_HOST }}
+#          username: ${{ secrets.SERVER_USERNAME }}
+#          password: ${{ secrets.SERVER_PASSWORD }}
+#          port: ${{ secrets.SERVER_SSH_PORT }}
+#          script: |
+#            ssh joseongsik@chihuahuaandweasel.online
+#            echo ###############
+#
+#            echo "${{ secrets.DOCKER_PASSWORD }}"
+#            docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+#            echo ###############
+#
+#            docker ps
+#            echo ###############
+#
+#            docker pull akachloe97/wedding_front
+#            echo ###############
+#
+#            docker run akachloe97/wedding_front -d -p 80:8080
+#            echo ###############
