@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: '/resume/',
+  // publicPath: '/resume/',
 
   css: {
     loaderOptions: {
@@ -10,7 +10,7 @@ module.exports = {
   },
 
   devServer: {
-    public: 'http://localhost:8080/resume/',
+    public: 'http://localhost:8080',
     disableHostCheck: true,
   },
 
