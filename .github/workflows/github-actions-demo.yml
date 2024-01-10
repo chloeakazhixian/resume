@@ -50,7 +50,7 @@ jobs:
           host: 49.142.48.252
           username: jh
           key: ${{ secrets.REMOTE_SSH_KEY }}
-#          port: ${{ secrets.REMOTE_SSH_PORT }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             whoami
