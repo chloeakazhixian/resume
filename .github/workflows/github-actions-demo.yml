@@ -58,10 +58,11 @@ jobs:
             docker ps
             
             docker stop pr
+            docker stop resume
 
             docker pull akachloe97/resume
             
-            docker run --rm --name pr -d -p 97:8080 akachloe97/resume
+            docker run --rm --name resume -d -p 97:8080 akachloe97/resume
 
             docker ps
 
