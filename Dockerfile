@@ -51,7 +51,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 
 # Copy the rest of the source files into the image.
-COPY node_modules .
+COPY . .
 # Run the build script.
 RUN npm run build
 
