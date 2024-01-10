@@ -47,7 +47,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     npm ci \
 
 RUN --mount=type=cache,target=/root/.npm \
-    npm --version
+    npm --version \
+
 
 # Copy the rest of the source files into the image.
 COPY node_modules .
